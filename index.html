@@ -1,1 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Jessica Nti's - Professional Profile</title>
 
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background-color: #f3e5f5; 
+            color: #333; 
+            line-height: 1.6; 
+            padding: 20px; 
+            user-select: none; /* Complementing the JS protection */
+        }
+
+        .container { 
+            display: flex; 
+            max-width: 1200px; 
+            margin: 30px auto; 
+            background-color: #fff; 
+            border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            overflow: hidden; 
+            min-height: 85vh; 
+        }
+
+        /* Left Column */
+        .left-column { 
+            width: 30%; 
+            background-color: #6a1b9a; 
+            padding: 40px 20px; 
+            color: white; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sticky-wrapper { 
+            position: sticky; 
+            top: 40px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+        }
+
+        .left-column img { 
+            width: 180px; 
+            height: 180px; 
+            border-radius: 50%; 
+            border: 5px solid rgba(255, 255, 255, 0.2); 
+            object-fit: cover; 
+            margin-bottom: 30px; 
+        }
+
+        .nav-menu { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+
+        .nav-btn { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-align: left; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            font-size: 0.95em;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .nav-btn.active { 
+            background: white; 
+            color: #6a1b9a; 
+            font-weight: 700; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Right Column */
+        .right-column { 
+            width: 70%; 
+            padding: 60px; 
+            position: relative; 
+        }
+
+        .profile-header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #f3e5f5;
+            padding-bottom: 20px;
+        }
+
+        .profile-header h1 { 
+            font-size: 3.2em; 
+            color: #4a148c; 
+            line-height: 1.1;
+        }
+
+        .profile-header p { 
+            color: #8e24aa; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-top: 5px;
+        }
+
+        h3 {
+            color: #6a1b9a;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section { 
+            display: none; 
+            animation: fadeIn 0.5s ease forwards; 
+        }
+
+        .content-section.active { display: block; }
+
+        .info-card { 
+            background: #fff; 
+            border-left: 4px solid #8e24aa; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            border-radius: 0 8px 8px 0; 
+        }
+
+        .info-card h4 { color: #333; margin-bottom: 5px; }
+        .info-card span { color: #8e24aa; font-size: 0.85em; font-weight: bold; display: block; margin-bottom: 8px; }
+
+        .social-links {
+            margin-top: 50px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            font-size: 1.8em;
+            color: #8e24aa;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover { transform: scale(1.2); color: #6a1b9a; }
+
+        /* Modal Forms */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+        }
+
+        .btn-primary { 
+            background: #6a1b9a; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+        
+        .btn-primary:hover { background: #4a148c; }
+
+        /* Cookie Pop-up Framework */
+        .cookie-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cookie-box {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .cookie-icon {
+            font-size: 3em;
+            color: #8e24aa;
+            margin-bottom: 15px;
+        }
+
+        .cookie-box h2 {
+            color: #4a148c;
+            margin-bottom: 12px;
+        }
+
+        .cookie-box p {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-cookie-accept {
+            background: #6a1b9a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: 0.3s;
+        }
+
+        .btn-cookie-accept:hover { background: #4a148c; }
+
+        .btn-cookie-deny {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            border: 1px solid #e1bee7;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: 0.3s;
+        }
+
+        .btn-cookie-deny:hover { background: #e1bee7; }
+
+        /* Footer Base Elements */
+        footer { text-align: center; padding: 20px; color: #6a1b9a; font-weight: bold; }
+
+        marquee {
+            background: #6a1b9a;
+            color: white;
+            padding: 12px 0;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .marquee-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 0 10px;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        .scrolling-text {
+            color: #e1bee7;
+            text-decoration: underline;
+            margin-left: 4px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .scrolling-text:hover {
+            color: #ffffff;
+        }
+
+        /* --- Dynamic Animated Copyright Signature Lines --- */
+        .animated-footer-line {
+            display: inline-block;
+            transition: all 0.3s ease;
+            animation: cloudSpectrum 8s infinite ease-in-out, pulseDim 4s infinite ease-in-out;
+        }
+
+        /* Continuous Color Spectrum Transition matching data system themes */
+        @keyframes cloudSpectrum {
+            0%   { color: #6a1b9a; text-shadow: 0 0 2px rgba(106, 27, 154, 0.1); }
+            25%  { color: #8e24aa; text-shadow: 0 0 8px rgba(142, 36, 170, 0.3); }
+            50%  { color: #0288d1; text-shadow: 0 0 10px rgba(2, 136, 209, 0.4); }
+            75%  { color: #009688; text-shadow: 0 0 8px rgba(0, 150, 136, 0.3); }
+            100% { color: #6a1b9a; text-shadow: 0 0 2px rgba(106, 27, 154, 0.1); }
+        }
+
+        /* Smooth Fluid Luminescence and Fade Loop (Dimming In & Out) */
+        @keyframes pulseDim {
+            0%   { opacity: 1; transform: scale(1); }
+            35%  { opacity: 0.4; transform: scale(0.99); }
+            50%  { opacity: 0.2; transform: scale(0.98); } /* Soft blink low point */
+            65%  { opacity: 0.4; transform: scale(0.99); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        @media (max-width: 900px) {
+            .container { flex-direction: column; }
+            .left-column, .right-column { width: 100%; }
+            .sticky-wrapper { position: relative; top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Cookie Consent Modal Overlay -->
+<div class="cookie-overlay" id="cookieRegistryModal">
+    <div class="cookie-box">
+        <div class="cookie-icon"><i class="fas fa-cookie-bite"></i></div>
+        <h2>Cookie Consent</h2>
+        <p>This web framework uses essential cookies and performance telemetry to guarantee optimal workspace loading, analytics validation, and operational data security infrastructure while browsing Jessica's profile.</p>
+        <div class="cookie-buttons">
+            <button class="btn-cookie-deny" onclick="handleCookieChoice(false)">Deny Essential Only</button>
+            <button class="btn-cookie-accept" onclick="handleCookieChoice(true)">Accept All</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="contactModal">
+    <div class="modal-content">
+        <span style="position:absolute; top:15px; right:20px; cursor:pointer; font-size:1.5em;" onclick="toggleModal()">&times;</span>
+        <h2 style="color: #6a1b9a; margin-bottom: 20px;">Contact ME</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="text" placeholder="Subject">
+            <textarea rows="4" placeholder="Your Message..." required></textarea>
+            <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="left-column">
+        <div class="sticky-wrapper">
+            <img src="Images/profile.jpeg" alt="Jessica Nti" onerror="this.src='https://via.placeholder.com/180/6a1b9a/ffffff?text=JN'">
+            
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="showSection('summary', this)">
+                    <i class="fas fa-user"></i> Professional Summary
+                </button>
+                <button class="nav-btn" onclick="showSection('experience', this)">
+                    <i class="fas fa-briefcase"></i> Experience
+                </button>
+                <button class="nav-btn" onclick="showSection('education', this)">
+                    <i class="fas fa-graduation-cap"></i> Education
+                </button>
+                <button class="nav-btn" onclick="showSection('certs', this)">
+                    <i class="fas fa-certificate"></i> Certifications
+                </button>
+                <button class="nav-btn" onclick="showSection('skills', this)">
+                    <i class="fas fa-tools"></i> Technical Skills
+                </button>
+                <button class="nav-btn" onclick="toggleModal()" style="margin-top:20px; background: white; color: #6a1b9a;">
+                    <i class="fas fa-paper-plane"></i> Get In Touch
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="right-column">
+        <div class="profile-header">
+            <h1>Jessica Nti</h1>
+            <p>Business & Systems Analyst | Systems and Data Insights</p>
+        </div>
+
+        <!-- Summary Section -->
+        <div id="summary" class="content-section active">
+            <h3><i class="fas fa-star"></i> About Me</h3>
+            <p>Proactive and Result Driven Business & System Analyst with a strong grounding in data and AI Engineering, operations, and technology supported environments. I specialise in turning complex information into clear, actionable insights that support effective decision making and improve business performance and system integration. Proven track record across fast-paced fintech and health, and telecommunications sectors; translating evolving corporate strategies into practical, reliable, sustainable, scalable technical frameworks. Skilled using data at managing system lifecycles, auditing security matrices to guarantee strict compliance and GDPR alignment, and orchestrating data-driven improvements that refine operational workflows. A collaborative communicator skilled at bridging technical and non-technical domains, engaging cross-functional teams, and guiding user-adoption initiatives to enhance organizational performance and maximize technological investments. Built and implemented use cases of AI Agents leveraging full stack Power Platform and resources with governance framework that ensured internal use of bots that improved automation and knowledge centre access.
+</p>
+            
+            <div style="margin-top: 25px;">
+                <p>Known to deliver a structured, analytical approach shaped by advanced training in business analytics, combined with hands-on experience in requirements gathering, process mapping, stakeholder engagement, and data analysis.
+                Leverages an advanced business analytics toolset to conduct deep-dive process mapping, requirements gathering, and data-driven reporting that uncovers operational bottlenecks.
+Whether contributing to product improvements, operational efficiency, or data‑driven reporting, I focus on delivering clarity, collaboration, and measurable value. I enjoy roles where I can bridge the gap between business and technology, helping teams understand problems, refine processes, and make informed decisions.
+</p>
+            </div>
+            
+            <div class="info-card" style="margin-top:25px;">
+                <h4>Technology Stacks & Skills</h4>
+                <p>Power BI, MS Azure, Data Factory, MS Fabrics, Python, Jupyta NoteBooks-Pandas, SQL, Claude-Anthropic, Power Platform Centre -Copilot Studio, Office 365, IDEs, MS 365 Solution, Cloud-SaaS and PaaS, Data Lake, Data WareHouse,Azure Entra ID, and Key Vaults</p>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div id="experience" class="content-section">
+            <h3><i class="fas fa-history"></i> Relevant Experience</h3>
+            <div class="info-card">
+                <h4>Business & Systems Analyst | Brassica Group of Companies</h4>
+                <span>Jan 2023 – Present</span>
+                <p> Ensured the analysis of digital payments data through requirements gathering, process analysis, Agile delivery support, and stakeholder engagement. Spearheaded the end-to-end administration, systems matrix auditing, and routine optimization of core enterprise HR and financial information systems (including Dynamics 365), maintaining up to 100% platform stability and strict GDPR compliance. By diagnosing operational bottlenecks and reviewing system error logs, I engineered automated workflows and AI Agent governance that eliminated manual workarounds, dramatically reducing user support tickets and accelerating cross-functional data processing times. Collaborating directly with department heads and IT teams, I constructively challenged legacy processes, gathered requirements, and formulated comprehensive UAT systems for major processes, successfully mitigating risks and guaranteeing uninterrupted business processes</p>
+            </div>
+            <div class="info-card">
+                <h4>Systems and Operations Analyst | RM Smart Systems</h4>
+                <span>Dec 2020 – Dec 2022</span>
+                <p>Conducted comprehensive operational data and systems audits to identify bottlenecks and monitored critical data and systems synchronization between central employee databases and integrated downstream financial platforms. By evaluating system exception logs, integration failures, and workflow trends within SaleForce PeoplePlace, Sun/Citrix Finance System and BizMerlinHR; where I diagnosed root causes to execute targeted configuration fixes within strict SLAs. Successfully, engineered custom dashboards and scheduled reports to deliver clear organizational insights to leadership while researching unutilized features and industry trends to roll out new, experience-enhancing modules. Largely, contributed to the establishment of productive partnerships across HR, recruitment, and learning teams to translate user requirements into technical specifications, authoring detailed SOPs that significantly increased global data accuracy.Produced a business success, operational processes and system performance, supporting digital tool implementation and KPI reporting to improve service delivery.</p>
+            </div>
+            <div class="info-card">
+                <h4>Business Operations & Insights Analyst | Vodafone Ghana</h4>
+                <span>July 2018 – Nov 2020</span>
+                <p> Spearheaded the end-to-end configuration, routine optimization, and comprehensive workflow audits of enterprise HRIS platforms to eliminate manual process bottlenecks and accelerate service delivery. By evaluating system performance metrics and user exception logs within Salesforce, I identified critical operational trends and configuration gaps to drive continuous process improvements. I managed the requirements engineering lifecycle, documenting technical specifications and user stories for internal system enhancements to ensure all configuration changes accurately reflected core business needs. Additionally, Built custom data models and operational reporting dashboards using analytics tools to deliver actionable insights to commercial, HR, and leadership team.</p> 
+                 <p>Finally, I partnered directly with System Engineers to validate complex data pipelines, test automated system processes, and troubleshoot platform integrations to guarantee optimal data integrity and strict security compliance.Successfully led commercial teams by analysing customer and network data, documenting business requirements, and improving internal processes.</p>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div id="education" class="content-section">
+            <h3><i class="fas fa-university"></i> Education</h3>
+            <div class="info-card">
+                <h4>Master of science in Business Analytics</h4>
+                <span>Aston University. Birmingham, UK</span>
+            </div>
+            <div class="info-card">
+                <h4>B.Sc Information Systems and Economics</h4>
+                <span>University of Ghana Legon. Accra, GH</span>
+            </div>
+        </div>
+
+        <!-- Certifications Section -->
+        <div id="certs" class="content-section">
+            <h3><i class="fas fa-award"></i> Professional Certifications</h3>
+            <div class="info-card"><h4>Agile Foundation</h4><span>2023</span></div>
+            <div class="info-card"><h4>Scrum Master, Self Study</h4><span>2020</span></div>
+            <div class="info-card"><h4>Microsoft Power BI Data Analyst (PL 300) Self Study </h4><span>2023</span></div>
+            <div class="info-card"><h4>Microsoft Azure Fundamentals (AZ 900) Self Study </h4><span>2019</span></div>
+             <div class="info-card"><h4>AWS Cloud Practitioner Self Study</h4><span>Ongoing</span></div>
+        </div>
+
+        <!-- Skills Section -->
+        <div id="skills" class="content-section">
+            <h3><i class="fas fa-code"></i> Technical Toolbox</h3>
+            <p><strong> Data & Analytics</strong> Power BI, Tableau, Excel (Advanced), SQL, Data Modelling, DAX, Data Cleaning, Dashboard Design, Reporting & Insights
+            <p><strong> Business Analysis</strong> Requirements Gathering, User Stories & Acceptance Criteria, Process Mapping (BPMN), Stakeholder Engagement, Workshops, UAT, Documentation, Agile Delivery
+               <p><strong>Tools & Platforms</strong> Jira, Copilot Studio, Confluence, Microsoft 365, SharePoint, Visio, Miro, Azure DevOps
+               <p><strong>Cloud Fundamentals:</strong> Azure (Fundamentals), AWS (Cloud Practitioner), Cloud Concepts, Security Basics, Data Storage Concepts
+               <p><strong>Soft Skills:</strong> Communication, Problem Solving, Critical Thinking, Collaboration, Stakeholder Management, and Analytical Thinking
+</p>
+        </div>
+
+        <div class="social-links">
+            <a href="https://github.com/Naanapinamang" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="mailto:ntijessica.jn@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/+44xxxxxx" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <!-- Modernized Data Streams with Native Pause Mechanics -->
+    <marquee scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
+        <span class="marquee-tag">Microsoft 365</span> Next-gen Copilot Studio unlocks autonomous multi-agent pipelines for enterprise systems... <a href="https://techcommunity.microsoft.com/" target="_blank" class="scrolling-text">Read Deep Dive</a>
+        <span class="marquee-tag">Data Analytics</span> Real-time telemetry structures scale vector index support inside high-throughput Data Lakes... <a href="https://azure.microsoft.com/updates/" target="_blank" class="scrolling-text">View Architecture</a>
+        <span class="marquee-tag">AWS Cloud</span> Amazon Bedrock enhances low-latency data visualization layers for predictive operational intelligence... <a href="https://aws.amazon.com/new/" target="_blank" class="scrolling-text">Check Release Notes</a>
+        <span class="marquee-tag">AI Agents</span> Cross-functional workflow engines eliminate business process bottlenecks via autonomous data auditing... <a href="https://cloud.google.com/whats-new" target="_blank" class="scrolling-text">Track Agent Specs</a>
+        <span class="marquee-tag">Visualization</span> Power BI updates map advanced DAX semantic modeling patterns for dynamic telemetry dashboards... <a href="https://powerbi.microsoft.com/blog/" target="_blank" class="scrolling-text">See Metrics Guide</a>
+    </marquee>
+    
+    <!-- Unified Dynamic Animated Footer Line -->
+    <p class="animated-footer-line">All Rights Reserved 2026® | Developed By Nti Jessica</p>
+</footer>
+
+<script>
+    // Cookie Pop-up Logic Execution Trigger
+    document.addEventListener("DOMContentLoaded", function() {
+        const cookieChoice = localStorage.getItem("jessicaProfileCookieConsent");
+        if (!cookieChoice) {
+            document.getElementById("cookieRegistryModal").style.display = "flex";
+        }
+    });
+
+    function handleCookieChoice(isAccepted) {
+        // Set the choice parameters in local user instance configurations
+        localStorage.setItem("jessicaProfileCookieConsent", isAccepted ? "accepted" : "denied");
+        document.getElementById("cookieRegistryModal").style.display = "none";
+    }
+
+    function showSection(sectionId, btnElement) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        // Deactivate all buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // Show target section
+        document.getElementById(sectionId).classList.add('active');
+        // Activate clicked button
+        btnElement.classList.add('active');
+    }
+
+    function toggleModal() {
+        const modal = document.getElementById('contactModal');
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    // Security Scripts
+    document.addEventListener('contextmenu', e => { 
+        e.preventDefault(); 
+        alert("Action Not Permitted. Reload Page"); 
+        location.reload(); 
+    });
+
+    document.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && ['c', 'a', 'u', 's'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+            location.reload();
+        }
+    });
+</script>
+</body>
+</html>
